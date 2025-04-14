@@ -169,7 +169,7 @@ export const SurveyForm = () => {
                 type={currentField.type}
                 value={currentFieldValue}
                 // @ts-ignore
-                onChange={e => updateField(currentField.name, e.target.value)}
+                onChange={e => updateField(e.target.value)}
               />
               <div className="flex w-full justify-between">
                 <Button variant="outline" disabled={currentIndex === 0} onClick={handleBack}>
