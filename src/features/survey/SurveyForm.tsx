@@ -143,6 +143,9 @@ export const SurveyForm = () => {
               <SelectItem value="1">short story</SelectItem>
               <SelectItem value="2">2 chapters</SelectItem>
               <SelectItem value="3">3 chapters</SelectItem>
+              <SelectItem value="4">4 chapters</SelectItem>
+              <SelectItem value="5">5 chapters</SelectItem>
+              <SelectItem value="6">6 chapters</SelectItem>
             </SelectContent>
           </Select>
         </div>
