@@ -40,7 +40,7 @@ export const StoryViewer = () => {
     }
   }
 
-  return <div className={`w-[420px] aspect-2/3 bg-gray-100 rounded-xl p-4 flex flex-col justify-start items-start overflow-auto`} ret={outer}>
+  return <div className={`w-[420px] aspect-2/3 bg-gray-100 rounded-xl p-4 flex flex-col justify-start items-start overflow-auto`} ref={outer}>
     <article className="prose">
       <Markdown>{story}</Markdown>
     </article>
