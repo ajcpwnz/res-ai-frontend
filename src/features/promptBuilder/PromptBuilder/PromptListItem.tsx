@@ -61,7 +61,7 @@ export const PromptListItem = ({prompt}: {prompt: Prompt}) => {
     <div className="flex items-center justify-between">
       <div className="flex-col flex-grow flex">
         <p className="font-bold">{prompt.label ?? prompt.name}</p>
-        <p>{parseTemplate(prompt.template)}</p>
+        <p className="line-clamp-3">{parseTemplate(prompt.template)}</p>
       </div>
       <div className="flex space-x-2">
         <Button variant="outline" onClick={() => selectPrompt(prompt.id)}><Play/> run</Button>

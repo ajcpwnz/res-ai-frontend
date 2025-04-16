@@ -1,12 +1,14 @@
 import { Button } from '@/components/ui/button'
 import { __nextChapterSummary, __story } from 'features/survey/state.ts'
 import { useAtom } from 'jotai'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Markdown from 'react-markdown'
 import { http } from 'utils/http.ts'
 
 
 export const StoryViewer = () => {
+  const outer = useRef<HTMLDivElement>(null);
+
   const [story, setStory] = useAtom(__story)
   const [summary, setSummary] = useAtom(__nextChapterSummary)
 
@@ -17,6 +19,12 @@ export const StoryViewer = () => {
     try {
       const response = await http.post(`/stories/generate`, {summaryId: summary });
       if (response.data.result) {
+        try {
+          if(outer.current) {
+            outer.current.scrollTop = 0;
+          }
+        } catch (e) {};
+
         setStory(response.data.result)
       }
 
@@ -32,7 +40,7 @@ export const StoryViewer = () => {
     }
   }
 
-  return <div className={`w-[420px] aspect-2/3 bg-gray-100 rounded-xl p-4 flex flex-col justify-start items-start overflow-auto`}>
+  return <div className={`w-[420px] aspect-2/3 bg-gray-100 rounded-xl p-4 flex flex-col justify-start items-start overflow-auto`} ret={outer}>
     <article className="prose">
       <Markdown>{story}</Markdown>
     </article>

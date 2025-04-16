@@ -185,7 +185,7 @@ export const SurveyForm = () => {
             </div>
           )}
           <div className="bg-white p-4 rounded flex flex-col space-y-2">
-            <p>{selectedPrompt && renderPreview(selectedPrompt.template, fields)}</p>
+            <p className=" line-clamp-7">{selectedPrompt && renderPreview(selectedPrompt.template, fields)}</p>
           </div>
           {done ? (
             <div className="flex flex-col w-full space-y-2">

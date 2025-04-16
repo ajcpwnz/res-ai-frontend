@@ -160,9 +160,9 @@ export const PromptForm = () => {
     const payload = { template: edited.template }
 
     try {
-      const { data: {result: {template, tokens}} } = await http.post('/prompts/tokenize', payload)
+      const { data: {result: {template}} } = await http.post('/prompts/tokenize', payload)
       changeField('template', template);
-      changeField('tokens', tokens);
+      updateTokens(template);
 
     } catch (error) {
       console.error(error)
