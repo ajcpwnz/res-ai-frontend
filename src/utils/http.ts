@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-export const API_HOST = 'http://localhost:5005'
-// const API_HOST = 'http://159.89.91.230:5000'
+// export const API_HOST = 'http://localhost:5005'
+const API_HOST = 'http://67.205.183.132:5005'
 
 export const http = axios.create({
   baseURL: `${API_HOST}/v1`,
