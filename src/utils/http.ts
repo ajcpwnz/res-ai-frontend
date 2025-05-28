@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const API_HOST = 'https://dev-api.underwritewise.com'
+export const API_HOST = import.meta.env.VITE_API_URL as string;
 // export const API_HOST = 'http://67.205.183.132:5005'
 
 export const http = axios.create({
