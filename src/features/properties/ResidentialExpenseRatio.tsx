@@ -1,3 +1,4 @@
+import { RentConfigurator } from 'components/RentConfigurator.tsx'
 import { Input } from 'components/ui/input.tsx'
 import { Label } from 'components/ui/label.tsx'
 import { PercentageInput } from 'components/ui/percentage-input.tsx'
@@ -5,10 +6,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'c
 import { FlowBlock } from 'features/flow/FlowBlock.tsx'
 import { useCurrentPropertyState, useForm } from 'features/flow/hooks.ts'
 import { AssesmentStatus } from 'features/flow/state.ts'
+import { __unitConfigurator } from 'features/properties/state.ts'
+import { useAtom } from 'jotai/index'
+import { useEffect } from 'react'
 import { renovationRates, RenovationScope } from 'utils/consts.ts'
 
-export const ResidentialExpenseRatio = () => {
-  const state = useCurrentPropertyState()
+export const ResidentialExpenseRatio = ({data}: {data: any}) => {
+  const state = useCurrentPropertyState();
+  const [units, setUnits] = useAtom(__unitConfigurator)
+
+  useEffect(() => {
+    if (data.units) {
+      setUnits(data.units)
+    }
+  }, [data])
+
   const { form, updateField } = useForm()
 
   return (
@@ -34,14 +46,7 @@ export const ResidentialExpenseRatio = () => {
       </div>
 
       <div className="w-full flex flex-col space-y-2">
-        <Label htmlFor="avg_rent">Rent price</Label>
-        <Input
-          name="avg_rent"
-          type="number"
-          step="0.01"
-          value={form.avg_rent}
-          onChange={(e) => updateField('avg_rent', e.target.value)}
-        />
+          <RentConfigurator value={units} onChange={v => setUnits(v)}/>
       </div>
 
       <div className="w-full flex flex-col space-y-2">

@@ -26,8 +26,7 @@ export const MarketSummary = () => {
 
   const stageData = useMemo(() => data.stage_2 || {}, [data])
 
-  const readyStages = Object.values(stageData).length
-
+  const readyStages = Object.values(stageData).filter(entry => Object.values(entry).length).length
 
   const isLoading = useMemo(() => {
     if (state.status !== AssesmentStatus.processing) {
@@ -49,10 +48,10 @@ export const MarketSummary = () => {
       {Object.keys(stageData).map((key) => <DataChunk chunk={key}/>)}
     </FlowBlock>
     {
-      readyStages === 7 ? <FlowBlock>
+      readyStages === 6 ? <FlowBlock>
           <Button onClick={proceed}>Proceed</Button>
         </FlowBlock>
-        : null
+        : <Loader />
     }
   </>
 }

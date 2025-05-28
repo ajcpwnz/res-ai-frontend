@@ -7,6 +7,14 @@ import { ArrowLeft } from 'lucide-react'
 import { useState } from 'react'
 import { rewindAssesment } from 'utils/api.ts'
 
+const mappedNames = {
+  1: 'Factual Property data',
+  2: 'Market Analysis',
+  3: 'Underwriting Assumptions',
+  4: 'Financial Projections',
+  5: 'Summary'
+};
+
 export const Stepper = () => {
   const [loading, setLoading] = useState(false);
   const {property, setProperty} = useSelectedProperty();
@@ -35,7 +43,7 @@ export const Stepper = () => {
         </Button> : null
       }
 
-      <Title><b>Stage {current}</b> of 5</Title>
+      <Title><b>Stage {current}</b> of 5. <span>{mappedNames[current]}</span></Title>
     </div>
     <div className="flex w-full justify-between space-x-1">
       {iterator.map((_, idx) => {

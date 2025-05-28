@@ -4,6 +4,7 @@ import { FlowBlock } from 'features/flow/FlowBlock.tsx'
 import { __selectedProperty, AssesmentStatus, useSelectedProperty } from 'features/flow/state.ts'
 import { DataChunk, DataSource } from 'features/properties/DataChunk.tsx'
 import { useModel } from 'features/properties/hooks.ts'
+import { __unitConfigurator } from 'features/properties/state.ts'
 import { useAtom, useAtomValue } from 'jotai/index'
 import { useEffect, useMemo } from 'react'
 import { advanceAssesment, processAssesment, saveAddressDetails } from 'utils/api.ts'
@@ -13,6 +14,7 @@ export const ExpenseRatio = () => {
   const {property, setProperty} = useSelectedProperty()
   const state = useCurrentPropertyState()
   const data = useModel(property.id)
+  const units = useAtomValue(__unitConfigurator)
 
   const { form } = useForm();
 
@@ -20,10 +22,8 @@ export const ExpenseRatio = () => {
     if (!property) return;
 
     await saveAddressDetails(property.id, {
-      expense_rate: form.expense_rate,
-      expense_rate_type: form.expense_rate_type,
-      renovation_scope: form.renovation_scope,
-      renovation_cost: form.renovation_cost,
+      ...form,
+      update_units: units
     });
 
     const advanced = await advanceAssesment(property.id);

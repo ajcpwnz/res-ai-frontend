@@ -46,38 +46,39 @@ type ConfigEntry = {
   components?: ComponentEntry[]
 }
 
-const chunkConfig: Record<string, Record<DataSource, ConfigEntry>> = {
-  Residential: {
-    [DataSource.RentCastAddressLookup]: { key: DataSource.RentCastAddressLookup, stage: 'stage_1', component: AddressDetailsForm },
-    [DataSource.RentCastMarketData]: { key: DataSource.RentCastMarketData, stage: 'stage_2', component: MarketData },
-    [DataSource.RentCastSalesComp]: { key: DataSource.RentCastSalesComp, stage: 'stage_2', component: MarketSalesData },
-    [DataSource.FloodData]: { key: DataSource.FloodData, stage: 'stage_2', component: FloodZoneData },
-    [DataSource.HUDFmr]: { key: DataSource.HUDFmr, stage: 'stage_2', component: FMRData },
-    [DataSource.CensusDemographicsReport]: { key: DataSource.CensusDemographicsReport, stage: 'stage_2', component: DemographicsData },
-    [DataSource.GooglePlacesList]: { key: DataSource.GooglePlacesList, stage: 'stage_2', component: RelatedPlaces },
-    [DataSource.PerplexityLocalData]: { key: DataSource.PerplexityLocalData, stage: 'stage_2', component: LocalData },
-    [DataSource.DerivedResidentialExpenseRatio]: { key: DataSource.DerivedResidentialExpenseRatio, stage: 'stage_3', component: ResidentialExpenseRatio },
-    [DataSource.DerivedResidentialFinancialProjections]: { key: DataSource.DerivedResidentialFinancialProjections, stage: 'stage_4', component: ResidentialFinancialProjections },
-    [DataSource.DerivedResidentialInvestmentSummary]: {
-      key: DataSource.DerivedResidentialInvestmentSummary,
-      stage: 'stage_5',
-      components: [
-        { key: DataSource.RentCastMarketData, stage: 'stage_2', component: MarketData },
-        { key: DataSource.RentCastSalesComp, stage: 'stage_2', component: MarketSalesData },
-        { key: DataSource.FloodData, stage: 'stage_2', component: FloodZoneData },
-        { key: DataSource.HUDFmr, stage: 'stage_2', component: FMRData },
-        { key: DataSource.CensusDemographicsReport, stage: 'stage_2', component: DemographicsData },
-        { key: DataSource.GooglePlacesList, stage: 'stage_2', component: RelatedPlaces },
-        { key: DataSource.PerplexityLocalData, stage: 'stage_2', component: LocalData },
-        { key: DataSource.DerivedResidentialFinancialProjections, stage: 'stage_4', component: ResidentialFinancialProjections },
-      ],
-    },
+const residentialConfig = {
+  [DataSource.RentCastAddressLookup]: { key: DataSource.RentCastAddressLookup, stage: 'stage_1', component: AddressDetailsForm },
+  [DataSource.RentCastMarketData]: { key: DataSource.RentCastMarketData, stage: 'stage_2', component: MarketData },
+  [DataSource.RentCastSalesComp]: { key: DataSource.RentCastSalesComp, stage: 'stage_2', component: MarketSalesData },
+  [DataSource.FloodData]: { key: DataSource.FloodData, stage: 'stage_2', component: FloodZoneData },
+  [DataSource.CensusDemographicsReport]: { key: DataSource.CensusDemographicsReport, stage: 'stage_2', component: DemographicsData },
+  [DataSource.GooglePlacesList]: { key: DataSource.GooglePlacesList, stage: 'stage_2', component: RelatedPlaces },
+  [DataSource.PerplexityLocalData]: { key: DataSource.PerplexityLocalData, stage: 'stage_2', component: LocalData },
+  [DataSource.DerivedResidentialExpenseRatio]: { key: DataSource.DerivedResidentialExpenseRatio, stage: 'stage_3', component: ResidentialExpenseRatio },
+  [DataSource.DerivedResidentialFinancialProjections]: { key: DataSource.DerivedResidentialFinancialProjections, stage: 'stage_4', component: ResidentialFinancialProjections },
+  [DataSource.DerivedResidentialInvestmentSummary]: {
+    key: DataSource.DerivedResidentialInvestmentSummary,
+    stage: 'stage_5',
+    components: [
+      { key: DataSource.RentCastMarketData, stage: 'stage_2', component: MarketData },
+      { key: DataSource.RentCastSalesComp, stage: 'stage_2', component: MarketSalesData },
+      { key: DataSource.FloodData, stage: 'stage_2', component: FloodZoneData },
+      { key: DataSource.HUDFmr, stage: 'stage_2', component: FMRData },
+      { key: DataSource.CensusDemographicsReport, stage: 'stage_2', component: DemographicsData },
+      { key: DataSource.GooglePlacesList, stage: 'stage_2', component: RelatedPlaces },
+      { key: DataSource.PerplexityLocalData, stage: 'stage_2', component: LocalData },
+      { key: DataSource.DerivedResidentialFinancialProjections, stage: 'stage_4', component: ResidentialFinancialProjections },
+    ],
   },
+};
+
+const chunkConfig: Record<string, Record<DataSource, ConfigEntry>> = {
+  SingleFamily: residentialConfig,
+  Residential: residentialConfig,
   MultiFamily: {
     [DataSource.RentCastAddressLookup]: { key: DataSource.RentCastAddressLookup, stage: 'stage_1', component: AddressDetailsForm },
     [DataSource.RentCastMarketData]: { key: DataSource.RentCastMarketData, stage: 'stage_2', component: MarketData },
     [DataSource.FloodData]: { key: DataSource.FloodData, stage: 'stage_2', component: FloodZoneData },
-    [DataSource.HUDFmr]: { key: DataSource.HUDFmr, stage: 'stage_2', component: FMRData },
     [DataSource.CensusDemographicsReport]: { key: DataSource.CensusDemographicsReport, stage: 'stage_2', component: DemographicsData },
     [DataSource.GooglePlacesList]: { key: DataSource.GooglePlacesList, stage: 'stage_2', component: RelatedPlaces },
     [DataSource.PerplexityLocalData]: { key: DataSource.PerplexityLocalData, stage: 'stage_2', component: LocalData },

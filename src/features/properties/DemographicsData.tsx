@@ -34,15 +34,15 @@ export const DemographicsData = ({ data: { demographics_data: data } }: Demograp
           </TableRow>
           <TableRow>
             <TableCell>White Population</TableCell>
-            <TableCell><b>{formatPercents(data.whitePopulation, data.totalPopulation)}</b> ({data.whitePopulation})</TableCell>
+            <TableCell>{formatPercents(data.whitePopulation, data.totalPopulation)}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell>Latino Population</TableCell>
-            <TableCell><b>{formatPercents(data.latinoPopulation, data.totalPopulation)}</b> ({data.latinoPopulation})</TableCell>
+            <TableCell>{formatPercents(data.latinoPopulation, data.totalPopulation)}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell>Black Population</TableCell>
-            <TableCell><b>{formatPercents(data.blackPopulation, data.totalPopulation)}</b> ({data.blackPopulation})</TableCell>
+            <TableCell>{formatPercents(data.blackPopulation, data.totalPopulation)}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell>Median Income</TableCell>

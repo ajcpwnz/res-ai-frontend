@@ -1,44 +1,52 @@
 import { Input } from 'components/ui/input.tsx'
 import { Label } from 'components/ui/label.tsx'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'components/ui/select.tsx'
-import { useCurrentPropertyState, useForm } from 'features/flow/hooks.ts'
-import { useRef } from 'react'
+import { UnitConfigurator } from 'components/UnitConfigurator.tsx'
+import { useForm } from 'features/flow/hooks.ts'
+import { useSelectedProperty } from 'features/flow/state.ts'
+import { __unitConfigurator } from 'features/properties/state.ts'
+import { useAtom } from 'jotai/index'
+import { useEffect } from 'react'
 
-export const AddressDetailsForm = () => {
-  const state = useCurrentPropertyState();
+export const AddressDetailsForm = ({ data }: { data: any }) => {
   const { form, updateField } = useForm()
-  const rcPropertyType = useRef(form.property_type)
+
+  const [units, setUnits] = useAtom(__unitConfigurator)
+
+  useEffect(() => {
+    if (data.units) {
+      setUnits(data.units)
+    }
+  }, [data])
+
+  const { property } = useSelectedProperty()
 
   return <div className="flex flex-col space-y-2">
-    <div className="w-full flex-col space-y-2">
-      <Label htmlFor="property_type">
-        Property type
-      </Label>
-
-      <div className="flex items-center space-x-2">
-        <div className="w-full">
-          <Select
-            name="property_type"
-            value={form.property_type}
-            onValueChange={v => updateField('property_type', v)}
-          >
-            <SelectTrigger className="w-full bg-white">
-              <SelectValue placeholder="Type"/>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Single Family">Single Family</SelectItem>
-              <SelectItem value="MultiFamily">Multifamily</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        {rcPropertyType.current ? <div className="flex flex-col w-2/5">
-          <span className="text-xs text-gray-700">rentcast: </span>
-          <p className="text-sm">{rcPropertyType.current}</p>
-        </div> : null }
+    {property.type === 'MultiFamily' ? (
+      <div className="mb-6">
+        <UnitConfigurator value={units} onChange={setUnits}/>
       </div>
-    </div>
-
-    <div className="flex space-x-2">
+    ) : property.type === 'Residential' ? (
+      <div className="flex space-x-2">
+        <div className="w-1/3 flex flex-col space-y-2">
+          <Label htmlFor="bedrooms">
+            Bedrooms
+          </Label>
+          <Input name="bedrooms" type="number" value={form.bedrooms} onChange={(e) => updateField('bedrooms', e.target.value)}/>
+        </div>
+        <div className="w-1/3 flex flex-col space-y-2">
+          <Label htmlFor="bathrooms">
+            Bathrooms
+          </Label>
+          <Input name="bathrooms" type="number" value={form.bathrooms} onChange={(e) => updateField('bathrooms', e.target.value)}/>
+        </div>
+        <div className="w-1/3 flex flex-col space-y-2">
+          <Label htmlFor="Unit count">
+            Unit count
+          </Label>
+          <Input name="unit_count" type="number" value={form.unit_count} onChange={(e) => updateField('unit_count', e.target.value)}/>
+        </div>
+      </div>
+    ) : <div className="flex space-x-2">
       <div className="w-1/2 flex flex-col space-y-2">
         <Label htmlFor="bedrooms">
           Bedrooms
@@ -53,6 +61,8 @@ export const AddressDetailsForm = () => {
       </div>
     </div>
 
+
+    }
     <div className="w-full flex flex-col space-y-2">
       <Label htmlFor="square_footage">
         Square Footage
@@ -94,5 +104,7 @@ export const AddressDetailsForm = () => {
       </Label>
       <Input name="zip_code" value={form.zip_code} onChange={(e) => updateField('zip_code', e.target.value)}/>
     </div>
+
+
   </div>
 }

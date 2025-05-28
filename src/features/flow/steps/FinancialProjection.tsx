@@ -1,13 +1,11 @@
-import { Loader } from 'components/Loader.tsx'
 import { Button } from 'components/ui/button.tsx'
 import { FlowBlock } from 'features/flow/FlowBlock.tsx'
-import { __selectedProperty, AssesmentStatus, useSelectedProperty } from 'features/flow/state.ts'
-import { DataChunk, DataSource } from 'features/properties/DataChunk.tsx'
+import { AssesmentStatus, useSelectedProperty } from 'features/flow/state.ts'
+import { DataChunk } from 'features/properties/DataChunk.tsx'
 import { useModel } from 'features/properties/hooks.ts'
-import { useAtom, useAtomValue } from 'jotai/index'
 import { useEffect, useMemo } from 'react'
 import { advanceAssesment, processAssesment, saveAddressDetails } from 'utils/api.ts'
-import { useCurrentPropertyState, useForm, useSteps } from '../hooks'
+import { useCurrentPropertyState, useForm } from '../hooks'
 
 export const FinancialProjection = () => {
   const {property, setProperty} = useSelectedProperty()
@@ -36,7 +34,6 @@ export const FinancialProjection = () => {
   const stageData = useMemo(() => data.stage_4 || {}, [data])
 
   const readyStages = Object.values(stageData).length;
-
 
   const isLoading = useMemo(() => {
     if (state.status !== AssesmentStatus.processing) {
