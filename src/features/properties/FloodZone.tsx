@@ -6,7 +6,7 @@ interface FloodZoneDataChunk {
 }
 
 export const FloodZoneData = ({ data }: { data: FloodZoneDataChunk }) => {
-  return (
+  return data ? (
     <div className="flex flex-col space-y-4">
       <div className="flex flex-col items-start">
         <div>
@@ -21,5 +21,5 @@ export const FloodZoneData = ({ data }: { data: FloodZoneDataChunk }) => {
         </div>
       </div>
     </div>
-  )
+  ) : null
 }

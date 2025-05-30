@@ -63,7 +63,6 @@ const residentialConfig = {
       { key: DataSource.RentCastMarketData, stage: 'stage_2', component: MarketData },
       { key: DataSource.RentCastSalesComp, stage: 'stage_2', component: MarketSalesData },
       { key: DataSource.FloodData, stage: 'stage_2', component: FloodZoneData },
-      { key: DataSource.HUDFmr, stage: 'stage_2', component: FMRData },
       { key: DataSource.CensusDemographicsReport, stage: 'stage_2', component: DemographicsData },
       { key: DataSource.GooglePlacesList, stage: 'stage_2', component: RelatedPlaces },
       { key: DataSource.PerplexityLocalData, stage: 'stage_2', component: LocalData },
@@ -90,7 +89,6 @@ const chunkConfig: Record<string, Record<DataSource, ConfigEntry>> = {
       components: [
         { key: DataSource.RentCastMarketData, stage: 'stage_2', component: MarketData },
         { key: DataSource.FloodData, stage: 'stage_2', component: FloodZoneData },
-        { key: DataSource.HUDFmr, stage: 'stage_2', component: FMRData },
         { key: DataSource.CensusDemographicsReport, stage: 'stage_2', component: DemographicsData },
         { key: DataSource.GooglePlacesList, stage: 'stage_2', component: RelatedPlaces },
         { key: DataSource.PerplexityLocalData, stage: 'stage_2', component: LocalData },

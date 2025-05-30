@@ -14,6 +14,8 @@ export interface Property {
 interface IProperty {
   'id': string,
   'type': PropertyType,
+  stage: string,
+  stageComplete: boolean,
   'address': {
     'id': string,
     'propertyId': string,
@@ -29,16 +31,15 @@ export const useSelectedProperty = () => {
   const { updateList } = usePropertyList()
 
   const setProperty = (property: IProperty | null) => {
-    if(property) {
-      console.warn('ASDSDASDS');
-
+    if (property) {
       updateList(property)
-    };
+    }
+
 
     _setProperty(property)
   }
 
-  return {property, setProperty}
+  return { property, setProperty }
 }
 
 export const __steps = atom({
@@ -77,4 +78,4 @@ export const __propertyStates = atom<Record<string, {
   meta: Record<string, any>
 }>>({})
 
-export const __error = atom('');
+export const __error = atom('')

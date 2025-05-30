@@ -1,5 +1,4 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Subtitle } from 'components/Subtitle.tsx'
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 
 interface FloodZoneDataChunk {
   fmr: string

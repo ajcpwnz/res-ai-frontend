@@ -12,17 +12,8 @@ export const FinancialProjection = () => {
   const state = useCurrentPropertyState()
   const data = useModel(property.id)
 
-  const { form } = useForm();
-
   const handleSubmit = async () => {
     if (!property) return;
-
-    await saveAddressDetails(property.id, {
-      expense_rate: form.expense_rate,
-      expense_rate_type: form.expense_rate_type,
-      renovation_scope: form.renovation_scope,
-      renovation_cost: form.renovation_cost,
-    });
 
     const advanced = await advanceAssesment(property.id);
     setProperty(advanced);

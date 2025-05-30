@@ -11,7 +11,7 @@ import { MarketData } from 'features/properties/MarketData.tsx'
 import { __modelData } from 'features/properties/state.ts'
 import { useSetAtom } from 'jotai'
 import { useAtom, useAtomValue } from 'jotai/index'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { getProperty, loadAssesment } from 'utils/api.ts'
 import { Stepper } from './flow/Stepper'
@@ -48,6 +48,7 @@ export const Flow = () => {
   const { setProperty } = useSelectedProperty()
   const states = useAtomValue(__propertyStates)
   const setModelData = useSetAtom(__modelData)
+  const [loading, setLoading] = useState(false);
 
   const { id } = useParams<{ id: string }>()
 
@@ -57,6 +58,7 @@ export const Flow = () => {
       return
     }
 
+    setLoading(true)
     getProperty(id).then(data => {
       setProperty(data.property)
       updateForm(data.property.meta)
@@ -66,7 +68,8 @@ export const Flow = () => {
       setModelData(old => ({
         ...old,
         [id]: data
-      }))
+      }));
+      setLoading(false)
     })
 
   }, [id])
@@ -88,6 +91,9 @@ export const Flow = () => {
     }
   }
 
+  if(loading) {
+    return <Loader />
+  }
 
   return <div className="min-h-[500px] overflow-x-visible flex flex-col items-start justify-start w-full">
     {renderCurrentStep()}

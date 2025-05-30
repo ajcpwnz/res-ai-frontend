@@ -46,14 +46,6 @@ export const LocalData = ({ data }: { data: VacancyData }) => {
               <TableCell>{localData.universityStudentCount || 'No data available'}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell className="font-semibold">Hospital Employee Count</TableCell>
-              <TableCell>{localData.hospitalEmployeeCount || 'No data available'}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-semibold">Mall Visitor Count</TableCell>
-              <TableCell>{localData.mallVisitorCount || 'No data available'}</TableCell>
-            </TableRow>
-            <TableRow>
               <TableCell className="font-semibold">Economic Development</TableCell>
               <TableCell style={{ whiteSpace: 'pre-wrap' }}>{localData.economicDevelopment || 'No data available'}</TableCell>
             </TableRow>
