@@ -43,12 +43,14 @@ export const MarketSummary = () => {
     }
   }, [readyStages])
 
+  console.warn(property,'ddd')
+
   return <>
     <FlowBlock wide loading={isLoading} className={`flex flex-col space-y-2`}>
       {Object.keys(stageData).map((key) => <DataChunk chunk={key}/>)}
     </FlowBlock>
     {
-      property.stageComplete ? <FlowBlock>
+      property.stageCompleted ? <FlowBlock>
           <Button onClick={proceed}>Proceed</Button>
         </FlowBlock>
         : <Loader />
