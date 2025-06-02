@@ -3,28 +3,26 @@ import { Button } from 'components/ui/button.tsx'
 import { Input } from 'components/ui/input.tsx'
 import { Label } from 'components/ui/label.tsx'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from 'components/ui/select.tsx'
-import { Checkbox } from 'components/ui/checkbox.tsx'
 import { UnitConfigurator } from 'components/UnitConfigurator.tsx'
 import { FlowBlock } from 'features/flow/FlowBlock.tsx'
 import { useCurrentPropertyState, useForm, useSteps } from 'features/flow/hooks.ts'
 import { AssesmentStatus, useSelectedProperty } from 'features/flow/state.ts'
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router'
-import { processAssesment, createProperty } from 'utils/api.ts'
+import { processAssesment, createProperty, uploadPropertyFile } from 'utils/api.ts'
 
 export type Unit = { bedrooms: number; bathrooms: number; quantity: number }
 
 const defaultUnits: Unit[] = [
-  { bedrooms: 1, bathrooms: 1, quantity: 3 },
-  { bedrooms: 2, bathrooms: 1, quantity: 1 },
-  { bedrooms: 3, bathrooms: 1, quantity: 1 },
+  { bedrooms: 1, bathrooms: 1, quantity: 1 },
 ]
 
 export const PropertyForm = () => {
   const [loading, setLoading] = useState(false)
   const [units, setUnits] = useState<Unit[]>(defaultUnits)
-  const [unknownLastSold, setUnknownLastSold] = useState(false)
-  const navigate = useNavigate();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [uploadingFile, setUploadingFile] = useState(false)
+  const navigate = useNavigate()
 
   const state = useCurrentPropertyState()
   const { setProperty } = useSelectedProperty()
@@ -64,11 +62,20 @@ export const PropertyForm = () => {
   }, [updateField])
 
 
-  const handleUnknownLastSoldChange = (checked: boolean) => {
-    setUnknownLastSold(checked)
-    if (checked) {
-      updateField('last_sold_date', '')
-      updateField('last_sold_price', '')
+  const handleUploadFile = async () => {
+    if (!selectedFile) return
+
+    setUploadingFile(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', selectedFile)
+      const response = await uploadPropertyFile(formData)
+
+      console.log('Upload successful:', response.data)
+    } catch (err) {
+      console.error('Error uploading file:', err)
+    } finally {
+      setUploadingFile(false)
     }
   }
 
@@ -80,9 +87,16 @@ export const PropertyForm = () => {
         address: form.address,
         last_sold_date: form.last_sold_date,
         last_sold_price: form.last_sold_price,
-        unit_count: form.unit_count,
-        units
+        units,
       }
+
+      // If your server expects the file’s raw text instead of a file upload:
+      // if (form.file_text) payload.file_text = form.file_text
+
+      // If your server expects to receive the file here, you could also
+      // append the file via multipart/form-data in exactly the same way
+      // as above. But in this example, the endpoint `/api/upload` is
+      // already responsible for reading file contents for you.
 
       const { property } = await createProperty(payload)
 
@@ -102,7 +116,6 @@ export const PropertyForm = () => {
     <FlowBlock loading={state.status === AssesmentStatus.processing} className="flex flex-col space-y-4">
       <Title className="font-bold">Start</Title>
 
-      {/* Address field */}
       <div className="w-full flex flex-col space-y-2">
         <Label htmlFor="address">Address</Label>
         <Input
@@ -114,13 +127,12 @@ export const PropertyForm = () => {
         />
       </div>
 
-      {/* Property type select */}
       <div className="flex space-x-2">
         <div className="w-full flex flex-col space-y-2">
           <Label htmlFor="type">Property type</Label>
           <Select name="type" value={form.type} onValueChange={v => updateField('type', v)}>
             <SelectTrigger className="w-full bg-white">
-              <SelectValue placeholder="Type" />
+              <SelectValue placeholder="Type"/>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="SingleFamily">Single Family House</SelectItem>
@@ -129,77 +141,42 @@ export const PropertyForm = () => {
             </SelectContent>
           </Select>
         </div>
-        {
-          form.type === 'Residential' && (
-            <div className="w-1/3 flex flex-col space-y-2">
-            <Label htmlFor="address">Unit count</Label>
-            <Input
-              id="unit_count"
-              name="unit_count"
-              value={form.unit_count}
-              type="number"
-              min="2"
-              max="4"
-              step="1"
-              onChange={e => updateField('unit_count', e.target.value)}
-            />
-          </div>)
-        }
       </div>
 
-      {form.type === 'MultiFamily' && (
-        <div className="my-6">
-          <UnitConfigurator value={units} onChange={setUnits} />
-        </div>
-      )}
-
-      {/* Last sold block with unknown toggle */}
-      <div className="flex flex-col space-y-2">
-        <div className="flex space-x-2">
-          <div className="w-full flex flex-col space-y-2">
-            <Label htmlFor="last_sold_date">Last sold date</Label>
-            <Input
-              id="last_sold_date"
-              name="last_sold_date"
-              type="date"
-              value={unknownLastSold ? '' : form.last_sold_date || ''}
-              disabled={unknownLastSold}
-              onChange={e => updateField('last_sold_date', e.target.value)}
-            />
+      {
+        !form.type || form.type === 'SingleFamily'
+          ? null
+          : <div className="my-6">
+            <UnitConfigurator mode={form.type} value={units} onChange={setUnits} />
           </div>
-          <div className="w-full flex flex-col space-y-2">
-            <Label htmlFor="last_sold_price">Last sold price ($)</Label>
-            <Input
-              id="last_sold_price"
-              name="last_sold_price"
-              type="number"
-              value={unknownLastSold ? '' : form.last_sold_price || ''}
-              disabled={unknownLastSold}
-              onChange={e => updateField('last_sold_price', e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="unknown_last_sold"
-            checked={unknownLastSold}
-            onCheckedChange={handleUnknownLastSoldChange}
-          />
-          <Label htmlFor="unknown_last_sold">Don't know last sold details</Label>
-        </div>
-      </div>
+      }
 
-      {/* File upload */}
       <p className="my-6 text-center">or upload a file</p>
-      <Input
-        name="file"
-        type="file"
-        onChange={e => updateField('file', e.target.files?.[0])}
-      />
+
+      <div className="flex items-center space-x-2">
+        <Input
+          name="file"
+          type="file"
+          onChange={e => {
+            const file = e.target.files?.[0] || null
+            setSelectedFile(file)
+          }}
+        />
+
+        {selectedFile && (
+          <Button
+            onClick={handleUploadFile}
+            loading={uploadingFile}
+            disabled={uploadingFile}
+          >
+            Upload File
+          </Button>
+        )}
+      </div>
 
       <Button
         loading={loading}
-        disabled={!((form.address && form.type) || form.file)}
+        disabled={!((form.address && form.type) || selectedFile)}
         onClick={handleSubmitProperty}
       >
         Start

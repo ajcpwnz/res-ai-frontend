@@ -58,7 +58,8 @@ export const AddressDetails = () => {
       {Object.keys(stageData).map((key) => <DataChunk chunk={key}/>)}
     </FlowBlock>
     {
-      readyStages === 1 ? <FlowBlock>
+      readyStages === 1
+        ? <FlowBlock>
           <Button onClick={handleSubmit}>Save and proceed</Button>
         </FlowBlock>
         : null

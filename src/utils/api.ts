@@ -60,6 +60,15 @@ export const downloadReport = async (id: string) => {
   return data;
 }
 
+export const uploadPropertyFile = async (formData: FormData) => {
+  const result  = await http.post('/properties/parse', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+
+  return result
+}
 
 
 export interface UpdateAddressDetailsPayload {
