@@ -61,13 +61,13 @@ export const downloadReport = async (id: string) => {
 }
 
 export const uploadPropertyFile = async (formData: FormData) => {
-  const result  = await http.post('/properties/parse', formData, {
+  const {data}  = await http.post('/properties/parse', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
   })
 
-  return result
+  return data
 }
 
 

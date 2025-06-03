@@ -85,7 +85,13 @@ export const AddressDetailsForm = ({ data }: { data: any }) => {
             id="last_sold_date"
             name="last_sold_date"
             type="date"
-            value={unknownLastSold ? '' : form.last_sold_date || ''}
+            value={
+              unknownLastSold
+                ? ""
+                : form.last_sold_date
+                  ? form.last_sold_date.split("T")[0]
+                  : ""
+            }
             disabled={unknownLastSold}
             onChange={e => updateField('last_sold_date', e.target.value)}
           />

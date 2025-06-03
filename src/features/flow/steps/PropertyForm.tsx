@@ -71,7 +71,7 @@ export const PropertyForm = () => {
       formData.append('file', selectedFile)
       const response = await uploadPropertyFile(formData)
 
-      console.log('Upload successful:', response.data)
+      return response
     } catch (err) {
       console.error('Error uploading file:', err)
     } finally {
@@ -82,29 +82,28 @@ export const PropertyForm = () => {
   const handleSubmitProperty = async () => {
     setLoading(true)
     try {
-      const payload: Record<string, any> = {
-        type: form.type,
-        address: form.address,
-        last_sold_date: form.last_sold_date,
-        last_sold_price: form.last_sold_price,
-        units,
+      if(selectedFile) {
+        const { property } = await handleUploadFile()
+        setProperty(property)
+        navigate(`/p/${property.id}`, { replace: true })
+
+      } else {
+        const payload: Record<string, any> = {
+          type: form.type,
+          address: form.address,
+          last_sold_date: form.last_sold_date,
+          last_sold_price: form.last_sold_price,
+          units,
+        }
+
+        const { property } = await createProperty(payload)
+
+        setProperty(property)
+        navigate(`/p/${property.id}`, { replace: true })
+
+        goToStep(1)
+        await processAssesment(property.id)
       }
-
-      // If your server expects the file’s raw text instead of a file upload:
-      // if (form.file_text) payload.file_text = form.file_text
-
-      // If your server expects to receive the file here, you could also
-      // append the file via multipart/form-data in exactly the same way
-      // as above. But in this example, the endpoint `/api/upload` is
-      // already responsible for reading file contents for you.
-
-      const { property } = await createProperty(payload)
-
-      setProperty(property)
-      navigate(`/p/${property.id}`, { replace: true })
-
-      goToStep(1)
-      await processAssesment(property.id)
     } catch (e) {
       console.error(e)
     } finally {
@@ -162,16 +161,6 @@ export const PropertyForm = () => {
             setSelectedFile(file)
           }}
         />
-
-        {selectedFile && (
-          <Button
-            onClick={handleUploadFile}
-            loading={uploadingFile}
-            disabled={uploadingFile}
-          >
-            Upload File
-          </Button>
-        )}
       </div>
 
       <Button
