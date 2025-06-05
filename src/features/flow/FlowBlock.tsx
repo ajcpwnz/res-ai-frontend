@@ -9,7 +9,7 @@ export const FlowBlock = ({ children, className, loading, wide }: {
 }) => {
 
 
-  return <div className={cx(wide ? 'w-full' : 'w-[420px]', className)}>
+  return <div className={cx(wide ? 'w-full flex-grow' : 'w-[420px]', className)}>
     {
       loading
         ? <div className="flex flex-col space-y-4 my-8">

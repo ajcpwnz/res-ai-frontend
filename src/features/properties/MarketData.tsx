@@ -29,7 +29,7 @@ interface MarketDataChunk {
 }
 
 export const MarketData = ({ data }: { data: MarketDataChunk }) => {
-  const { marketData, comparables } = data
+  const { marketData, comparables } = (data || {})
 
   return (
     <div className="flex flex-col space-y-4">

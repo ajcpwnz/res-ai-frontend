@@ -5,63 +5,93 @@ interface CreatePropertyPayload extends Record<string, any> {
 
 }
 
-export const getProperties = async () => {
-  const { data } = await http.get('/properties');
 
-  return data;
+export interface RegisterPayload {
+  username: string;
+  email: string;
+  password: string;
+}
+
+export const registerUser = async (payload: RegisterPayload) => {
+  const { data } = await http.post('/auth/register', payload)
+
+  return data
+}
+
+export interface LoginPayload {
+  email: string;
+  password: string;
+}
+
+export const loginUser = async (payload: LoginPayload) => {
+  const { data } = await http.post('/auth/login', payload)
+
+  return data
+}
+
+export const getProfile = async () => {
+  const {data} = await http.get('/auth/me');
+
+  return data
+}
+
+export const getProperties = async () => {
+  const { data } = await http.get('/properties')
+
+  return data
 }
 
 export const deleteProperty = async (id: string) => {
-  const { data } = await http.delete(`/properties/${id}`);
+  const { data } = await http.delete(`/properties/${id}`)
 
-  return data;
+  return data
 }
 
 export const getProperty = async (id: string) => {
-  const { data } = await http.get(`/properties/${id}`);
+  const { data } = await http.get(`/properties/${id}`)
 
-  return data;
+  return data
 }
 
 export const createProperty = async (payload: CreatePropertyPayload) => {
-  const { data } = await http.post('/properties', payload);
+  const { data } = await http.post('/properties', payload)
 
-  return data;
+  return data
 }
 
 export const processAssesment = async (id: string) => {
-  const { data } = await http.post(`/properties/${id}/process`);
+  const { data } = await http.post(`/properties/${id}/process`)
 
-  return data;
+  return data
 }
 
 export const loadAssesment = async (id: string) => {
-  const { data } = await http.post(`/properties/${id}/assesment`);
+  const { data } = await http.post(`/properties/${id}/assesment`)
 
-  return data;
+  return data
 }
 
 
 export const advanceAssesment = async (id: string) => {
-  const { data } = await http.post(`/properties/${id}/advance`);
+  const { data } = await http.post(`/properties/${id}/advance`)
 
-  return data;
+  return data
 }
 
 export const rewindAssesment = async (id: string) => {
-  const { data } = await http.post(`/properties/${id}/rewind`);
+  const { data } = await http.post(`/properties/${id}/rewind`)
 
-  return data;
+  return data
 }
 
 export const downloadReport = async (id: string) => {
-  const { data } = await http.get(`/properties/${id}/report`, {responseType: 'blob'});
+  const { data } = await http.get(`/properties/${id}/report`, { responseType: 'blob' })
 
-  return data;
+  return data
 }
 
 export const uploadPropertyFile = async (formData: FormData) => {
-  const {data}  = await http.post('/properties/parse', formData, {
+  const { data } = await http.post('/properties/parse', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -84,7 +114,7 @@ export interface UpdateAddressDetailsPayload {
 }
 
 export const saveAddressDetails = async (id: string, payload: UpdateAddressDetailsPayload) => {
-  const { data } = await http.put(`/properties/${id}`, payload);
+  const { data } = await http.put(`/properties/${id}`, payload)
 
-  return data;
+  return data
 }

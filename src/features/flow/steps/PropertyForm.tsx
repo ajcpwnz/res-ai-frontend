@@ -112,64 +112,66 @@ export const PropertyForm = () => {
   }
 
   return (
-    <FlowBlock loading={state.status === AssesmentStatus.processing} className="flex flex-col space-y-4">
-      <Title className="font-bold">Start</Title>
+    <div className="flex w-full items-center justify-center">
+      <FlowBlock loading={state.status === AssesmentStatus.processing} className="flex flex-col space-y-4">
+        <Title className="font-bold">Start</Title>
 
-      <div className="w-full flex flex-col space-y-2">
-        <Label htmlFor="address">Address</Label>
-        <Input
-          id="address"
-          name="address"
-          value={form.address}
-          onChange={e => updateField('address', e.target.value)}
-          ref={addressRef}
-        />
-      </div>
-
-      <div className="flex space-x-2">
         <div className="w-full flex flex-col space-y-2">
-          <Label htmlFor="type">Property type</Label>
-          <Select name="type" value={form.type} onValueChange={v => updateField('type', v)}>
-            <SelectTrigger className="w-full bg-white">
-              <SelectValue placeholder="Type"/>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="SingleFamily">Single Family House</SelectItem>
-              <SelectItem value="Residential">Multifamily (2-4 units)</SelectItem>
-              <SelectItem value="MultiFamily">Multifamily (5+ units)</SelectItem>
-            </SelectContent>
-          </Select>
+          <Label htmlFor="address">Address</Label>
+          <Input
+            id="address"
+            name="address"
+            value={form.address}
+            onChange={e => updateField('address', e.target.value)}
+            ref={addressRef}
+          />
         </div>
-      </div>
 
-      {
-        !form.type || form.type === 'SingleFamily'
-          ? null
-          : <div className="my-6">
-            <UnitConfigurator mode={form.type} value={units} onChange={setUnits} />
+        <div className="flex space-x-2">
+          <div className="w-full flex flex-col space-y-2">
+            <Label htmlFor="type">Property type</Label>
+            <Select name="type" value={form.type} onValueChange={v => updateField('type', v)}>
+              <SelectTrigger className="w-full bg-white">
+                <SelectValue placeholder="Type"/>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="SingleFamily">Single Family House</SelectItem>
+                <SelectItem value="Residential">Multifamily (2-4 units)</SelectItem>
+                <SelectItem value="MultiFamily">Multifamily (5+ units)</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-      }
+        </div>
 
-      <p className="my-6 text-center">or upload a file</p>
+        {
+          !form.type || form.type === 'SingleFamily'
+            ? null
+            : <div className="my-6">
+              <UnitConfigurator mode={form.type} value={units} onChange={setUnits} />
+            </div>
+        }
 
-      <div className="flex items-center space-x-2">
-        <Input
-          name="file"
-          type="file"
-          onChange={e => {
-            const file = e.target.files?.[0] || null
-            setSelectedFile(file)
-          }}
-        />
-      </div>
+        <p className="my-6 text-center">or upload a file</p>
 
-      <Button
-        loading={loading}
-        disabled={!((form.address && form.type) || selectedFile)}
-        onClick={handleSubmitProperty}
-      >
-        Start
-      </Button>
-    </FlowBlock>
+        <div className="flex items-center space-x-2">
+          <Input
+            name="file"
+            type="file"
+            onChange={e => {
+              const file = e.target.files?.[0] || null
+              setSelectedFile(file)
+            }}
+          />
+        </div>
+
+        <Button
+          loading={loading}
+          disabled={!((form.address && form.type) || selectedFile)}
+          onClick={handleSubmitProperty}
+        >
+          Start
+        </Button>
+      </FlowBlock>
+    </div>
   )
 }

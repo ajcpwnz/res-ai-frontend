@@ -24,7 +24,7 @@ export const AddressDetailsForm = ({ data }: { data: any }) => {
 
 
   useEffect(() => {
-    if (data.units) {
+    if (data?.units) {
       setUnits(data.units)
     }
   }, [data])
