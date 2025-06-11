@@ -2,7 +2,7 @@ import { Property, PropertyType } from 'features/flow/state.ts'
 import { http } from 'utils/http.ts'
 
 interface CreatePropertyPayload extends Record<string, any> {
-
+  address: string;
 }
 
 

@@ -6,7 +6,6 @@ import { useParams } from 'react-router'
 
 
 const mockData = {
-  address: '2813 W Clearfield St, Philadelphia, PA 19132',
   stage1: {
     lookupData: {
       property_type: "Single Family",

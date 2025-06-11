@@ -2,7 +2,8 @@ import { SigninPage } from '@/screens/signin.tsx'
 import { __authorizedUser } from 'features/auth/state.ts'
 import { DebugProvider } from 'features/DebugProvider.tsx'
 import { useSetAtom } from 'jotai'
-import { useEffect } from 'react'
+import { Loader2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router'
 import { getProfile } from 'utils/api.ts'
 import { ClientPage } from './screens/client'
@@ -12,23 +13,25 @@ import { SignupPage } from './screens/signup'
 
 
 const App = () => {
+  const [loading, setLoading] = useState(true);
+
   const setUser = useSetAtom(__authorizedUser)
 
   useEffect(() => {
     (async () => {
       const token = localStorage.getItem('jwt_token')
       if (!token) {
-        // setLoading(false);
+        setLoading(false);
         return
       }
       try {
         const res = await getProfile()
         setUser(res)
       } catch {
-        // localStorage.removeItem('jwt_token');
+        localStorage.removeItem('jwt_token');
         setUser(null)
       } finally {
-        // setLoading(false);
+        setLoading(false);
       }
     })()
   }, [])
@@ -36,6 +39,9 @@ const App = () => {
 
   return (
     <div>
+      <div className={`fixed z-50 ${loading ? 'opacity-100' : 'opacity-0 pointer-events-none'} bg-white w-full h-full top-0 left-0 flex items-center justify-center`}>
+        <Loader2 className="size-20 text-blue-300 animate-spin" />
+      </div>
       <DebugProvider>
         <SocketHandler/>
         <BrowserRouter>

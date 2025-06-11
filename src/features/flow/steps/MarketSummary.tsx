@@ -43,10 +43,8 @@ export const MarketSummary = () => {
     }
   }, [readyStages])
 
-  console.warn(property,'ddd')
-
   return <>
-    <FlowBlock wide loading={isLoading} className={`flex flex-col space-y-2`}>
+    <FlowBlock wide loading={isLoading} className={`flex flex-col space-y-2 pb-10`}>
       {Object.keys(stageData).map((key) => <DataChunk chunk={key}/>)}
     </FlowBlock>
     {

@@ -13,6 +13,7 @@ import { ResidentialFinancialProjections } from 'features/properties/Residential
 import { useModel } from 'features/properties/hooks.ts'
 import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 
 export enum DataSource {
   RentCastAddressLookup = 'RentCastAddressLookup',
@@ -103,14 +104,22 @@ export const DataChunk = ({ chunk }: { chunk: DataSource }) => {
   const config = useMemo(() => chunkConfig[property.type]?.[chunk], [property, chunk])
   if (!config) return null
 
-  if (config.components) {
-    return config.components.map(({ key, stage, component: C }) => (
-      <div className="my-4"><C data={data?.[stage]?.[key]} key={`${stage}-${key}`} /></div>
-    ))
+  const renderContent = () => {
+    if (config.components) {
+      return config.components.map(({ key, stage, component: C }) => (
+        <div className="my-4"><C data={data?.[stage]?.[key]} key={`${stage}-${key}`} /></div>
+      ))
+    }
+    if (config.component) {
+      const C = config.component
+      return <div className="my-4"><C data={data?.[config.stage]?.[config.key]} /></div>
+    }
+    return <div className="my-4">{JSON.stringify(data?.[config.stage]?.[config.key])}</div>
   }
-  if (config.component) {
-    const C = config.component
-    return <div className="my-4"><C data={data?.[config.stage]?.[config.key]} /></div>
-  }
-  return <div className="my-4">{JSON.stringify(data?.[config.stage]?.[config.key])}</div>
+
+  return <ErrorBoundary fallbackRender={ex => {
+    return <div className="my-4 rounded-lg bg-red-100 text-red-700 p-4">No data for {chunk}. <b>{ex.error?.toString()}</b></div>
+  }}>
+    {renderContent()}
+  </ErrorBoundary>
 }

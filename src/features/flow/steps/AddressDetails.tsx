@@ -44,17 +44,8 @@ export const AddressDetails = () => {
   const stageData = useMemo(() => data.stage_1 || {}, [data])
 
   const readyStages = Object.values(stageData).length
-
-  const isLoading = useMemo(() => {
-    if (state.status !== AssesmentStatus.processing) {
-      return false
-    }
-
-    return !readyStages
-  }, [state, stageData])
-
   return <>
-    <FlowBlock loading={isLoading} className={`flex flex-col`}>
+    <FlowBlock loading={!property.stageCompleted} className={`flex flex-col`}>
       {Object.keys(stageData).map((key) => <DataChunk chunk={key}/>)}
     </FlowBlock>
     {

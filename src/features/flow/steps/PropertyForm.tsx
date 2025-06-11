@@ -19,9 +19,7 @@ const defaultUnits: Unit[] = [
 
 export const PropertyForm = () => {
   const [loading, setLoading] = useState(false)
-  const [units, setUnits] = useState<Unit[]>(defaultUnits)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [uploadingFile, setUploadingFile] = useState(false)
   const navigate = useNavigate()
 
   const state = useCurrentPropertyState()
@@ -64,8 +62,7 @@ export const PropertyForm = () => {
 
   const handleUploadFile = async () => {
     if (!selectedFile) return
-
-    setUploadingFile(true)
+    setLoading(true);
     try {
       const formData = new FormData()
       formData.append('file', selectedFile)
@@ -75,7 +72,7 @@ export const PropertyForm = () => {
     } catch (err) {
       console.error('Error uploading file:', err)
     } finally {
-      setUploadingFile(false)
+      setLoading(false)
     }
   }
 
@@ -89,11 +86,7 @@ export const PropertyForm = () => {
 
       } else {
         const payload: Record<string, any> = {
-          type: form.type,
           address: form.address,
-          last_sold_date: form.last_sold_date,
-          last_sold_price: form.last_sold_price,
-          units,
         }
 
         const { property } = await createProperty(payload)
@@ -126,32 +119,7 @@ export const PropertyForm = () => {
             ref={addressRef}
           />
         </div>
-
-        <div className="flex space-x-2">
-          <div className="w-full flex flex-col space-y-2">
-            <Label htmlFor="type">Property type</Label>
-            <Select name="type" value={form.type} onValueChange={v => updateField('type', v)}>
-              <SelectTrigger className="w-full bg-white">
-                <SelectValue placeholder="Type"/>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="SingleFamily">Single Family House</SelectItem>
-                <SelectItem value="Residential">Multifamily (2-4 units)</SelectItem>
-                <SelectItem value="MultiFamily">Multifamily (5+ units)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        {
-          !form.type || form.type === 'SingleFamily'
-            ? null
-            : <div className="my-6">
-              <UnitConfigurator mode={form.type} value={units} onChange={setUnits} />
-            </div>
-        }
-
-        <p className="my-6 text-center">or upload a file</p>
+        <p className="mt-4 mb-6 text-center">or upload a file</p>
 
         <div className="flex items-center space-x-2">
           <Input
@@ -166,7 +134,7 @@ export const PropertyForm = () => {
 
         <Button
           loading={loading}
-          disabled={!((form.address && form.type) || selectedFile)}
+          disabled={!(form.address || selectedFile)}
           onClick={handleSubmitProperty}
         >
           Start

@@ -31,7 +31,7 @@ export const AddressDetailsForm = ({ data }: { data: any }) => {
 
   const { property } = useSelectedProperty()
 
-  return <div className="flex flex-col space-y-2">
+  return <div className="flex flex-col space-y-5">
     <div className="mb-6">
       <UnitConfigurator mode={property.type} value={units} onChange={setUnits}/>
     </div>
